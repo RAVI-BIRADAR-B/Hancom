@@ -1,12 +1,11 @@
-<template>
-<div class="" style="position:relative;z-index:8" >
+<template position:fixed;z-index:6>
+<div ref="outermostRef" class="" style="position:relative;z-index:8" >
   <div
   class=""
   ref="scrollbar"
   v-on="eventStoppers()"
   @click="scrollBarClick"
   :style="outerScrollBarDivObj"
-  :title="properties.ControlTipText"
   @mouseover="updateMouseCursor"
   @keydown.enter="setContentEditable($event, true)"
   @keydown.esc="setContentEditable($event, false)"
@@ -26,7 +25,7 @@
       class="tooltip"
       style="position:relative;z-index:15"
       >
-          <pre style="position:fixed;z-index:20;margin-top:-40px;orientation: landscape" orient="landscape"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+          <pre style="position:fixed;z-index:20;margin-top:-40px"  orient="horizontal"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
         <FdSvgImage
           key="leftArrow"
@@ -35,11 +34,12 @@
           class="svgLeftRightStyle "
           :style="svgLeftRightStyleObj"
           @mouseover="text()"
+          style="position:fixed;z-index:10"
         />
 
       </button>
       <div class="tooltip" style="position:relative;z-index:11">
-         <pre style="position:fixed;z-index:20;orientation: 'landscape'" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
       <input
         :disabled="getDisableValue"
@@ -65,7 +65,7 @@
       class="tooltip"
       style="position:relative;z-index:8"
       >
-         <pre style="position:fixed;z-index:20;margin-top:-40px;orientation: 'landscape'" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre  style="position:fixed;z-index:20;margin-top:-40px" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
         <FdSvgImage
           key="rightArrow"
@@ -91,6 +91,7 @@ import FdControlVue from '@/api/abstract/FormDesigner/FdControlVue'
 import FdSvgImage from '@/FormDesigner/components/atoms/FDSVGImage/index.vue'
 import { controlProperties } from '@/FormDesigner/controls-properties'
 import $ from 'jquery'
+import { orientation } from '@/FormDesigner/controls-select-types'
 
 @Component({
   name: 'FDScrollBar',
@@ -100,6 +101,7 @@ import $ from 'jquery'
 })
 export default class FDScrollBar extends Mixins(FdControlVue) {
   @Ref('scrollbar') scrollbar: HTMLDivElement;
+  @Ref('outermostRef') outermostRef: HTMLDivElement;
 
   $el: HTMLDivElement
   isInvert: boolean = false
@@ -373,16 +375,24 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
     console.log('event', e)
     const myRef = this.scrollbar
     console.log(this.properties.ControlTipText)
+    var ab = 0
+    if (this.properties.Height > this.properties.Width) {
+      ab = -90
+    } else {
+      ab = 0
+    }
+    console.log('ab value', ab)
     $(myRef).hover(function () {
       $(myRef).mouseover(function (e) {
         $('.tooltiptext')
           .css({
             position: 'absolute',
             left: e.offsetX + 10,
-            top: e.offsetY
+            top: e.offsetY,
+            transform: `rotate(${ab}deg)`
           })
-        console.log(e.offsetX)
-        console.log(e.offsetY)
+        // console.log(e.offsetX)
+        // console.log(e.offsetY)
       })
     })
   }
