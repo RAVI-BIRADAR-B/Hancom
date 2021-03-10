@@ -1,17 +1,16 @@
-<template position:fixed;z-index:6>
-<div ref="outermostRef" class="" style="position:relative;z-index:8" >
+<template style="position:relative;z-index:6 ">
+<div  class="" style="position:relative;z-index:7" >
   <div
   class=""
   ref="scrollbar"
   v-on="eventStoppers()"
-  @click="scrollBarClick"
+  @click="scrollBarClick,changeStatus()"
   :style="outerScrollBarDivObj"
   @mouseover="updateMouseCursor"
   @keydown.enter="setContentEditable($event, true)"
   @keydown.esc="setContentEditable($event, false)"
   :tabindex="0"
   @mousedown="controlEditMode"
-
   >
 
     <div class="slidecontainer " :style="cssVars">
@@ -25,7 +24,7 @@
       class="tooltip"
       style="position:relative;z-index:15"
       >
-          <pre style="position:fixed;z-index:20;margin-top:-40px"  orient="horizontal"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+          <pre style="position:fixed;z-index:50;margin-top:-40px;overflow:visible;clear:both"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
         <FdSvgImage
           key="leftArrow"
@@ -39,7 +38,7 @@
 
       </button>
       <div class="tooltip" style="position:relative;z-index:11">
-         <pre style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
       <input
         :disabled="getDisableValue"
@@ -65,7 +64,7 @@
       class="tooltip"
       style="position:relative;z-index:8"
       >
-         <pre  style="position:fixed;z-index:20;margin-top:-40px" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre  style="position:fixed;z-index:50;margin-top:-40px;clear:both" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
         <FdSvgImage
           key="rightArrow"
@@ -101,7 +100,6 @@ import { orientation } from '@/FormDesigner/controls-select-types'
 })
 export default class FDScrollBar extends Mixins(FdControlVue) {
   @Ref('scrollbar') scrollbar: HTMLDivElement;
-  @Ref('outermostRef') outermostRef: HTMLDivElement;
 
   $el: HTMLDivElement
   isInvert: boolean = false
@@ -372,16 +370,15 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
     }
   }
   text (e:MouseEvent) {
-    console.log('event', e)
     const myRef = this.scrollbar
     console.log(this.properties.ControlTipText)
-    var ab = 0
-    if (this.properties.Height > this.properties.Width) {
-      ab = -90
+    var flag = 0
+    if (this.properties.Height >= this.properties.Width) {
+      flag = -90
     } else {
-      ab = 0
+      flag = 0
     }
-    console.log('ab value', ab)
+    console.log('flag value', flag)
     $(myRef).hover(function () {
       $(myRef).mouseover(function (e) {
         $('.tooltiptext')
@@ -389,13 +386,23 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
             position: 'absolute',
             left: e.offsetX + 10,
             top: e.offsetY,
-            transform: `rotate(${ab}deg)`
+            transform: `rotate(${flag}deg)`
           })
         // console.log(e.offsetX)
         // console.log(e.offsetY)
       })
     })
   }
+  // changeStatus () {
+  //   const myRef = this.scrollbar
+  //   console.log(this.properties.ControlTipText)
+  //   $('.tooltiptext')
+  //     .css({
+  //       visibility: 'hidden'
+  //     })
+  //   // console.log(e.offsetX)
+  //   // console.log(e.offsetY)
+  // }
 }
 </script>
 
