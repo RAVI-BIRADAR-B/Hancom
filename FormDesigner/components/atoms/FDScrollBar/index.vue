@@ -1,5 +1,5 @@
 <template>
-<div class="" >
+<div class="" style="position:relative;z-index:8" >
   <div
   class=""
   ref="scrollbar"
@@ -12,6 +12,7 @@
   @keydown.esc="setContentEditable($event, false)"
   :tabindex="0"
   @mousedown="controlEditMode"
+
   >
 
     <div class="slidecontainer " :style="cssVars">
@@ -25,7 +26,7 @@
       class="tooltip"
       style="position:relative;z-index:15"
       >
-          <pre style="position:fixed;z-index:20 ;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+          <pre style="position:fixed;z-index:20;margin-top:-40px;orientation: landscape" orient="landscape"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
         <FdSvgImage
           key="leftArrow"
@@ -38,7 +39,7 @@
 
       </button>
       <div class="tooltip" style="position:relative;z-index:11">
-         <pre style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre style="position:fixed;z-index:20;orientation: 'landscape'" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
       <input
         :disabled="getDisableValue"
@@ -64,14 +65,15 @@
       class="tooltip"
       style="position:relative;z-index:8"
       >
-         <pre style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre style="position:fixed;z-index:20;margin-top:-40px;orientation: 'landscape'" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
 
         <FdSvgImage
           key="rightArrow"
           name="right-arrow.svg"
           @hook:mounted="changeForeColor"
-          class="svgLeftRightStyle "
+          class="svgLeftRightStyle  "
           :style="svgLeftRightStyleObj"
+          style="position:relative;z-index:14"
         />
 
       </button>
