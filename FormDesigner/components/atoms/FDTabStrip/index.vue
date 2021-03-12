@@ -7,13 +7,14 @@
       :style="pageStyleObj"
       @mouseover="updateMouseCursor, text()"
       @contextmenu="contextMenuVisible($event, -1)"
-      @click="tabStripClick"
+      @click="tabStripClick, changeStatus()"
       @mousedown="controlEditMode"
       @keydown.enter="setContentEditable($event, true)"
       @keydown.esc="setContentEditable($event, false)"
       @keydown.delete="deleteTabControl($event)"
       :tabindex="properties.TabIndex"
       :title="properties.ControlTipText"
+      @mouseleave="changeStatusAgain()"
     >
 
       <div
@@ -90,7 +91,7 @@
 
       </div>
 </div>
-          <pre  ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+          <pre v-if="this.status && this.properties.ControlTipText" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
 
     </div>
   </div>
@@ -1052,6 +1053,13 @@ export default class FDTabStrip extends FdControlVue {
       })
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

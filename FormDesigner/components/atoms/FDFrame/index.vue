@@ -13,6 +13,8 @@
     @keydown.enter.exact="setContentEditable($event, true)"
     @contextmenu="showContextMenu($event, controlId, controlId, 'container', isEditMode)"
     @keyup.stop="selectMultipleCtrl($event, false)"
+    @click="changeStatus()"
+    @mouseleave="visibilityHandler()"
   >
     <legend ref="fieldsetRef" :style="legendCssStyleProperty">{{ properties.Caption }}</legend>
     <div :style="scrollSize" ref="frame" >
@@ -36,7 +38,7 @@
       @addControlObj="addContainerControl"
       @mouseover="text()"
       />
-      <pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+      <pre v-if="this.status && this.properties.ControlTipText"  style="position:fixed; top:clientX,left:clientY" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
       </div>
   </div>
   </fieldset>
@@ -327,6 +329,7 @@ export default class FDFrame extends Mixins(FdContainerVue) {
       this.addControlObj(event, this.controlId)
     }
   }
+  status = true
   text (e:MouseEvent) {
     const myRef = this.frame
     console.log(this.properties.ControlTipText)
@@ -343,6 +346,12 @@ export default class FDFrame extends Mixins(FdContainerVue) {
         console.log(e.pageY)
       })
     })
+  }
+  changeStatus () {
+    this.status = false
+  }
+  visibilityHandler () {
+    this.status = true
   }
 }
 </script>

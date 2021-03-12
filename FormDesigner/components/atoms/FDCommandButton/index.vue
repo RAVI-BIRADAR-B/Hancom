@@ -14,9 +14,10 @@
     "
     @mousedown="controlEditMode"
     @keydown.enter.prevent="setContentEditable($event, true)"
-    @click="commandButtonClick"
+    @click="commandButtonClick, changeStatus()"
     @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
     @mousemove="text()"
+    @mouseleave="changeStatusAgain()"
   >
   <div id="logo" ref="logoRef" :style="reverseStyle">
     <img v-if="properties.Picture" id="img" :src="properties.Picture" draggable="false" :style="[imageProperty,imagePos]" ref="imageRef">
@@ -37,7 +38,7 @@
       @releaseEditMode="releaseEditMode"
     >
     </FDEditableText>
-    <pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+    <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
     </div>
   </button>
 </div>
@@ -352,6 +353,13 @@ export default class FDCommandButton extends Mixins(FdControlVue) {
       })
     }, 1000)
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

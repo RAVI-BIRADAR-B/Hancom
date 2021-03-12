@@ -6,12 +6,13 @@
     ref="componentRef"
     class="outer-check tooltip"
     :style="cssStyleProperty"
-    @click="checkBoxClick"
+    @click="checkBoxClick, changeStatus()"
     @mouseover="updateMouseCursor, text()"
     @keydown.enter.prevent="setContentEditable($event, true)"
     :tabindex="properties.TabIndex"
     @mousedown="controlEditMode"
     @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
+    @mouseleave="changeStatusAgain()"
   >
 
     <label class="control" :style="controlStyleObj">
@@ -56,7 +57,7 @@
       </div>
 
 </div>
-<pre ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+<pre v-if="this.status && this.properties.ControlTipText" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
 
     </div>
 </template>
@@ -536,6 +537,13 @@ export default class FDCheckBox extends Mixins(FdControlVue) {
       })
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

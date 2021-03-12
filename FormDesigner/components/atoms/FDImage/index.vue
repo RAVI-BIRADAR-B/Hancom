@@ -6,13 +6,13 @@
   <div
     class="picture tooltip div"
     :style="cssStyleProperty"
-    :title="properties.ControlTipText"
     @mouseover="updateMouseCursor"
     @keydown.delete="deleteItem"
-    @click="imageClick"
+    @click="imageClick, changeStatus()"
     ref="imageRef1"
+    @mouseleave="changeStatusAgain()"
   >
-   <pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+   <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
   </div>
   </div>
 </template>
@@ -149,6 +149,13 @@ export default class FDImage extends Mixins(FdControlVue) {
       })
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

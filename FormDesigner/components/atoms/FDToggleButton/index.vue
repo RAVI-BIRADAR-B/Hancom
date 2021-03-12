@@ -1,12 +1,11 @@
 <template>
-<div ref="componentRef" :tabindex="properties.TabIndex" :style="outerDivStyleObj" @mouseover="updateMouseCursor, text()" class="tooltip">
-  <pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+<div ref="componentRef" :tabindex="properties.TabIndex" :style="outerDivStyleObj" @mouseover="updateMouseCursor, text()" class="tooltip" @click="changeStatus()" @mouseleave="changeStatusAgain()">
+  <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
   <button
     class="toggle-button"
     :style="styleObj"
     :name="properties.Name"
     :tabindex="properties.TabIndex"
-    :title="properties.ControlTipText"
     :runmode="getDisableValue"
     @mousedown="controlEditMode"
     @keydown.enter.prevent="setContentEditable($event, true)"
@@ -16,7 +15,7 @@
         isFocus = false;
       }
     "
-    @click="toggleButtonClick"
+    @click="toggleButtonClick, changeStatus()"
     @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
   >
     <div id="logo" ref="logoRef" :style="reverseStyle">
@@ -398,6 +397,13 @@ export default class FDToggleButton extends Mixins(FdControlVue) {
       })
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

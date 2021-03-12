@@ -1,13 +1,13 @@
 <template>
 <div class="tooltip" @mouseover="text()" >
-  <pre style="position : absolute; Z-index : 1" ><div id="divContainer" v-if = "this.ab === 1"  class="tooltiptext" :input="properties.ControlTipText">{{properties.ControlTipText}}</div></pre>
+  <pre v-if="this.status && this.properties.ControlTipText" style="position : absolute; Z-index : 1" ><div id="divContainer" v-if = "this.ab === 1"  class="tooltiptext" :input="properties.ControlTipText">{{properties.ControlTipText}}</div></pre>
 
   <div
     class="listStyle tooltip"
     ref="listStyleOuterRef"
     :style="listStyleObj"
     :title="properties.ControlTipText"
-    @click="listBoxClick"
+    @click="listBoxClick,changeStatus()"
     @mousedown="controlEditMode"
     :tabindex="properties.TabIndex"
     @keydown="forMatchEntry"
@@ -15,6 +15,7 @@
     @scroll="updateScrollLeft"
     @keydown.esc="setContentEditable($event, false)"
     @mouseover="text()"
+  @mouseleave="visibilityHandler()"
   >
 
     <div class="table-style" :style="tableStyleObj" @mouseover="updateMouseCursor" ref="listBoxTableRef" v-if="properties.RowSource !== ''">
@@ -1231,6 +1232,7 @@ export default class FDListBox extends Mixins(FdControlVue) {
     }
   }
   ab = 0
+  status =true
   text (e:MouseEvent) {
     this.ab = 1
     const myRef = this.listStyleOuterRef
@@ -1250,6 +1252,12 @@ export default class FDListBox extends Mixins(FdControlVue) {
         })
       })
     }, 0)
+  }
+  changeStatus () {
+    this.status = false
+  }
+  visibilityHandler () {
+    this.status = true
   }
 }
 </script>

@@ -9,6 +9,8 @@
   v-on="eventStoppers()"
   class=""
   style="position:relative;z-index:7"
+  @click="changeStatus()"
+  @mouseleave="visibilityHandler()"
   >
 
 <div
@@ -43,8 +45,10 @@
           @blur="isClicked = false"
           @mouseover="updateMouseCursor"
           style="position:relative;z-index:10"
+          @click="changeStatus()"
+  @mouseleave="visibilityHandler()"
         >
-      <pre style="position:fixed; z-index:20;orientation:landscape" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
+      <pre v-if="this.status" style="position:fixed; z-index:20;orientation:landscape" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
 
           <div v-if="checkOtherOrientations()" :style="svgOuterDivObj">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" :style="svgStyleObj" :height="(properties.Height/2 > 60 && properties.Height < 850) ? properties.Height/2 - 45 : properties.Height >= 850 ? 425 : 15" :width="(properties.Width/2 > 60 && properties.Width < 850) ? properties.Width/2 - 45  : properties.Width >= 850 ? 425 : 15"
@@ -101,8 +105,10 @@
           @blur="isClicked = false"
           @mouseover="updateMouseCursor"
           style="position:relative;z-index:9"
+          @click="changeStatus()"
+  @mouseleave="visibilityHandler()"
         >
-      <pre style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
+      <pre  :status="this.status" v-if="status" style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
 
           <div v-if="checkOtherOrientations()" :style="svgOuterDivObj">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" :style="svgStyleObj" :height="(properties.Height/2 > 60 && properties.Height < 850) ? properties.Height/2 - 45 : properties.Height >= 850 ? 425 : 15" :width="(properties.Width/2 > 60 && properties.Width < 850) ? properties.Width/2 - 45  : properties.Width >= 850 ? 425 : 15"
@@ -396,6 +402,7 @@ export default class FDSpinButton extends Mixins(FdControlVue) {
       event.stopPropagation()
     }
   }
+  status = true
   text (e:MouseEvent) {
     const myRef = this.spinButtonRef
     console.log(this.properties.ControlTipText)
@@ -412,6 +419,13 @@ export default class FDSpinButton extends Mixins(FdControlVue) {
         console.log(e.offsetY)
       })
     })
+  }
+  changeStatus () {
+    this.status = false
+    console.log('in change status')
+  }
+  visibilityHandler () {
+    this.status = true
   }
 }
 </script>

@@ -4,12 +4,13 @@
     :tabindex="tabindex"
     :style="customSelectObj"
     :title="properties.ControlTipText"
-    @click="comBoxClick"
+    @click="comBoxClick, changeStatus()"
     @keydown.enter="setContentEditable($event, true)"
     @keydown.esc="releaseEditMode"
     v-on="eventStoppers()"
     @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
     @mousemove="text()"
+    @mouseleave="changeStatusAgain()"
   >
     <div
       class="combobox"
@@ -47,7 +48,7 @@
           @dragstart="dragBehavior"
           @keydown.enter.prevent
        />
-<pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+<pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
 
         <div
           ref="hideSelectionDiv"
@@ -1797,6 +1798,13 @@ export default class FDComboBox extends Mixins(FdControlVue) {
       console.log(e.clientY)
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

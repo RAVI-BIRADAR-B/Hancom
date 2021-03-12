@@ -1,7 +1,9 @@
 <template>
 <div class="tooltip">
 
-  <div >
+  <div
+  @click="changeStatus()"
+      @mouseleave="changeStatusAgain()" >
 
     <div
       class="outer-page tooltip"
@@ -23,6 +25,7 @@
         :title="properties.ControlTipText"
         v-if="controls.length > 0"
       >
+
           <div
             ref="controlTabsRef"
             class="page tooltip"
@@ -31,6 +34,7 @@
             :style="getTabStyle"
             @mouseover="updateMouseCursor, text()"
           >
+
             <FDControlTabs
               class="tooltip"
               @setValue="setValue"
@@ -57,6 +61,7 @@
               ref="controlTab"
             />
           </div>
+
              <div class="move" ref="scrolling" :style="styleMoveObj" @mouseup="mouseUpOnPage" @mouseover="updateMouseCursor">
 
         </div>
@@ -68,6 +73,7 @@
           @mouseover="updateMouseCursor, text()"
           :title="properties.ControlTipText"
         >
+
           <div
             v-if="controls.includes(selectedPageID)"
             :style="containerDivStyle"
@@ -104,16 +110,20 @@
              class="tooltip"
              @mouseover="text()"
             />
+
           </div>
+
         </div>
+
         <div></div>
-        <div :style="getScrollButtonStyleObj" ref="buttonStyleRef">
+        <div style="position:relative;z-index:7" :style="getScrollButtonStyleObj" ref="buttonStyleRef">
+
           <button class="left-button tooltip" :style="scrollButtonStyle" @click="leftmove" @mouseover="updateMouseCursor, text()"></button>
           <button class="right-button tooltip" :style="scrollButtonStyle" @click="rightmove" @mouseover="updateMouseCursor , text()"></button>
         </div>
+<pre v-if="this.status && this.properties.ControlTipText" style="position:fixed;z-index:8" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
 
       </div>
-<pre style="position:fixed" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
 
     </div>
 
@@ -1485,6 +1495,13 @@ export default class FDMultiPage extends Mixins(FdContainerVue) {
       })
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 

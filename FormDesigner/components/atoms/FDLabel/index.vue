@@ -10,9 +10,10 @@
 
     @mousedown="addEventCustomCallback"
     @keydown.enter.prevent="setContentEditable($event, true)"
-    @click="labelClick"
+    @click="labelClick, changeStatus()"
     @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
         @mouseover="text()"
+        @mouseleave="changeStatusAgain()"
   >
     <div id="logo" ref="logoRef" :style="reverseStyle">
     <img v-if="properties.Picture" id="img" :src="properties.Picture" draggable="false" :style="[imageProperty,imagePos]" ref="imageRef">
@@ -34,7 +35,7 @@
       @releaseEditMode="releaseEditMode"
     >
     </FDEditableText>
-    <pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+    <pre :input="properties.ControlTipText" v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
     </div>
     </label>
   </div>
@@ -342,19 +343,14 @@ export default class FDLabel extends Mixins(FdControlVue) {
       })
     })
   }
+  status = true
+  changeStatus () {
+    this.status = false
+  }
+  changeStatusAgain () {
+    this.status = true
+  }
 }
-
-// $(document).hover(function () {
-//   $('body').mouseover(function (e) {
-//     console.log('In jquery')
-//     $('#divContainer')
-//       .css({
-//         position: 'fixed',
-//         left: e.pageX - 0.4 * e.pageX,
-//         top: e.pageY - 0.57 * e.pageY
-//       })
-//   })
-// })
 
 </script>
 <style scoped>

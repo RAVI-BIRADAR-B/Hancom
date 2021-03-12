@@ -5,11 +5,12 @@
     :style="cssStyleProperty"
     ref="componentRef"
     @mouseover="updateMouseCursor, text()"
-    @click="optionBtnClick"
+    @click="optionBtnClick, changeStatus()"
     :tabindex="properties.TabIndex"
     @mousedown="controlEditMode"
     @keydown.enter.prevent="setContentEditable($event, true)"
     @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
+    @mouseleave="changeStatusAgain()"
   >
   <label class="control" :style="controlStyleObj">
     <input
@@ -21,7 +22,7 @@
         :disabled="getDisableValue"
         type="radio"
         class="control-input visually-hidden" />
-        <pre style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+        <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
       <span
         :class="['control-indicator', getCheckStyle]"
         :style="controlIndicatorStyleObj"
@@ -524,6 +525,13 @@ export default class FDOptionButton extends Mixins(FdControlVue) {
       })
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
 }
 </script>
 
