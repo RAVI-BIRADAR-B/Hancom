@@ -12,13 +12,14 @@
   :tabindex="0"
   @mousedown="controlEditMode"
   @mouseleave="visibilityHandler()"
+  @mousemove="text()"
   >
-         <pre v-if="this.status && this.properties.ControlTipText && this.firsttwo" style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
-         <pre v-if="this.status && this.properties.ControlTipText && this.thirdone" style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre v-if="this.status && this.properties.ControlTipText && this.firsttwo"  style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
+         <pre v-if="this.status && this.properties.ControlTipText && this.thirdone"   style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
     <div class="slidecontainer tooltip" :style="cssVars">
 
       <button :style="scrollBarButtonStyleObj"
-      @mouseover="updateMouseCursor, text(), toptwo()"
+      @mouseover="updateMouseCursor, toptwo()"
       @mousedown="!getDisableValue?properties.Min > properties.Max ? increaseTheValue() : decreaseTheValue():''"
       @mouseup="setIsSpinButtonScrollBarMouseDown"
       @mouseout="setIsSpinButtonScrollBarMouseDown"
@@ -34,12 +35,12 @@
           @hook:mounted="changeForeColor"
           class="svgLeftRightStyle "
           :style="svgLeftRightStyleObj"
-          @mouseover="text()"
+
           style="position:relative;z-index:10"
         />
 
       </button>
-      <div class="tooltip" style="position:relative;z-index:11" @mouseover="toptwo(), text()" @mouseleave="toptwoLeave()">
+      <div  class="tooltip" style="position:relative;z-index:11" @mouseover="toptwo(), text()" @mouseleave="toptwoLeave()">
 
       <input
         :disabled="getDisableValue"
@@ -146,6 +147,13 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
       '--invertValue': this.isEditMode ? this.isInvert ? '1' : '0' : '0',
       '--thumbHeight': this.thumbHeight,
       '--minHeight': this.minHeight
+    }
+  }
+  get control () {
+    return {
+      transform: (this.properties.Min! > this.properties.Max!) ? this.scrollReAlign() : this.checkOtherOrientations() ? 'rotate(90deg)' : '',
+      transformOrigin: (this.properties.Min! > this.properties.Max!) ? this.checkOtherOrientations() ? '0% 0%' : '' : ''
+
     }
   }
 
@@ -406,22 +414,23 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
     var pos:number
     var final
     console.log(this.thirdone, 'ysygygdygdygdygdygdyg')
-    if (this.thirdone) {
+    if (this.thirdone && this.firsttwo === false) {
       console.log('in third element')
       console.log(this.properties.Height! >= this.properties.Width!, ' inner if')
       if (this.properties.Height! >= this.properties.Width!) {
         pos = this.properties.Height!
-        $(myRef).hover(function () {
+        $(myRef).mousemove(function () {
           $(myRef).mouseover(function (e) {
             $('.tooltiptext')
               .css({
                 position: 'absolute',
-                left: e.offsetX + 10,
+                left: e.offsetX,
                 top: pos
                 // transform: `rotate(${flag}deg)`
               })
-            // console.log(e.offsetX)
-            // console.log(e.offsetY)
+            console.log(e.offsetX)
+            console.log('here')
+            console.log(pos + 10)
           })
         })
       } else {
@@ -436,8 +445,7 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
                 top: e.offsetY
                 // transform: `rotate(${flag}deg)`
               })
-            // console.log(e.offsetX)
-            // console.log(e.offsetY)
+            console.log(e.offsetX, e.offsetY)
           })
         })
       }
@@ -448,12 +456,11 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
           $('.tooltiptext')
             .css({
               position: 'absolute',
-              left: e.offsetX,
-              top: e.offsetY
+              left: e.offsetX + 20,
+              top: e.offsetY + 10
             // transform: `rotate(${flag}deg)`
             })
-          console.log(e.offsetX)
-          console.log(e.offsetY)
+          console.log(e.offsetX, e.offsetY)
         })
       })
     }
