@@ -329,14 +329,14 @@ export default class FDLabel extends Mixins(FdControlVue) {
   text (e:MouseEvent) {
     const myRef = this.componentRef
     console.log(this.properties.ControlTipText)
-    $(myRef).hover(function () {
+    $(myRef).mousemove(function () {
       $(myRef).mouseover(function (e) {
         debugger
         $('.tooltiptext')
           .css({
             position: 'absolute',
-            left: e.offsetX,
-            top: e.offsetY
+            left: e.offsetX + 10,
+            top: e.offsetY + 15
           })
         console.log(e.pageX)
         console.log(e.pageY)

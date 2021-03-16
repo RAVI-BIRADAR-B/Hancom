@@ -22,7 +22,6 @@
         :disabled="getDisableValue"
         type="radio"
         class="control-input visually-hidden" />
-        <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
       <span
         :class="['control-indicator', getCheckStyle]"
         :style="controlIndicatorStyleObj"
@@ -42,6 +41,7 @@
           }}</span>
           <span :style="spanStyleObj">{{ computedCaption.beforeendCaption }}</span>
         </div>
+
         <FDEditableText
           v-else
           :editable="isRunMode === false && syncIsEditMode"
@@ -53,6 +53,8 @@
         >
         </FDEditableText>
       </div>
+        <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+
     </div>
 </template>
 
@@ -510,6 +512,7 @@ export default class FDOptionButton extends Mixins(FdControlVue) {
   }
   text (e:MouseEvent) {
     const myRef = this.componentRef
+    var rect = myRef.getBoundingClientRect()
     console.log(this.properties.ControlTipText)
     $(myRef).hover(function () {
       $(myRef).mouseover(function (e) {
@@ -518,7 +521,7 @@ export default class FDOptionButton extends Mixins(FdControlVue) {
           .css({
             position: 'absolute',
             left: e.offsetX - 10,
-            top: e.offsetY - 10
+            top: e.offsetY
           })
         console.log(e.pageX)
         console.log(e.pageY)

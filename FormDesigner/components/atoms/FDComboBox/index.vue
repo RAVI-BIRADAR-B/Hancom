@@ -1785,14 +1785,15 @@ export default class FDComboBox extends Mixins(FdControlVue) {
   }
   text (e:MouseEvent) {
     const myRef = this.textareaRef
+    var rect = myRef.getBoundingClientRect()
     console.log(this.properties.ControlTipText)
     myRef.addEventListener('mouseover', function (e) {
       debugger
       $('.tooltiptext')
         .css({
           position: 'absolute',
-          left: e.offsetX,
-          top: e.offsetY
+          left: e.clientX - rect.left,
+          top: e.clientY - rect.top
         })
       console.log(e.clientX)
       console.log(e.clientY)

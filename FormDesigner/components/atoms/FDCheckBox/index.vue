@@ -522,6 +522,8 @@ export default class FDCheckBox extends Mixins(FdControlVue) {
   }
   text (e:MouseEvent) {
     const myRef = this.componentRef
+    var rect = myRef.getBoundingClientRect()
+
     console.log(this.properties.ControlTipText)
     $(myRef).hover(function () {
       $(myRef).mouseover(function (e) {
@@ -529,8 +531,8 @@ export default class FDCheckBox extends Mixins(FdControlVue) {
         $('.tooltiptext')
           .css({
             position: 'absolute',
-            left: e.offsetX,
-            top: e.offsetY
+            left: e.clientX - rect.left,
+            top: e.clientY - rect.top
           })
         console.log(e.pageX)
         console.log(e.pageY)

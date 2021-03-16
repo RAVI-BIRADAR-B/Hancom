@@ -1,5 +1,7 @@
 <template>
-<div ref="componentRef" :tabindex="properties.TabIndex" @mouseover="updateMouseCursor">
+<div ref="componentRef" :tabindex="properties.TabIndex" @mouseover="updateMouseCursor" class="tooltip">
+    <pre v-if="this.status && this.properties.ControlTipText" style="position:absolute;z-index: 20"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+
   <button
     class="commandbutton tooltip"
     :style="styleObj"
@@ -19,6 +21,7 @@
     @mousemove="text()"
     @mouseleave="changeStatusAgain()"
   >
+
   <div id="logo" ref="logoRef" :style="reverseStyle">
     <img v-if="properties.Picture" id="img" :src="properties.Picture" draggable="false" :style="[imageProperty,imagePos]" ref="imageRef">
     <div v-if="!syncIsEditMode || isRunMode" :style="labelStyle"  ref="textSpanRef">
@@ -38,7 +41,6 @@
       @releaseEditMode="releaseEditMode"
     >
     </FDEditableText>
-    <pre v-if="this.status && this.properties.ControlTipText" style="position:fixed; top:clientX,left:clientY"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
     </div>
   </button>
 </div>
@@ -336,6 +338,8 @@ export default class FDCommandButton extends Mixins(FdControlVue) {
   }
   text (e:MouseEvent) {
     const myRef = this.componentRef
+    var rect = myRef.getBoundingClientRect()
+
     console.log(this.properties.ControlTipText)
     setTimeout(() => {
       $(myRef).hover(function () {
@@ -344,8 +348,8 @@ export default class FDCommandButton extends Mixins(FdControlVue) {
           $('.tooltiptext')
             .css({
               position: 'absolute',
-              left: e.offsetX - 100,
-              top: e.offsetY - 50
+              left: e.offsetX,
+              top: e.offsetY
             })
           console.log(e.pageX)
           console.log(e.pageY)
@@ -385,7 +389,7 @@ width: auto;
   }
   .tooltip:hover .tooltiptext {
   visibility: visible;
-  position: static;
+  position: absolute;
   top:0px;
   left:0px;
 }

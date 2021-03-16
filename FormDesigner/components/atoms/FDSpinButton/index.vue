@@ -7,7 +7,7 @@
   @keydown.enter="setContentEditable($event, true)"
   @keydown.esc="setContentEditable($event, false)"
   v-on="eventStoppers()"
-  class=""
+  class="tooltip"
   style="position:relative;z-index:7"
   @click="changeStatus()"
   @mouseleave="visibilityHandler()"
@@ -48,8 +48,6 @@
           @click="changeStatus()"
   @mouseleave="visibilityHandler()"
         >
-      <pre v-if="this.status" style="position:fixed; z-index:20;orientation:landscape" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
-
           <div v-if="checkOtherOrientations()" :style="svgOuterDivObj">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" :style="svgStyleObj" :height="(properties.Height/2 > 60 && properties.Height < 850) ? properties.Height/2 - 45 : properties.Height >= 850 ? 425 : 15" :width="(properties.Width/2 > 60 && properties.Width < 850) ? properties.Width/2 - 45  : properties.Width >= 850 ? 425 : 15"
         viewBox="0 0 810.000000 460.000000"
@@ -108,7 +106,6 @@
           @click="changeStatus()"
   @mouseleave="visibilityHandler()"
         >
-      <pre  :status="this.status" v-if="status" style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
 
           <div v-if="checkOtherOrientations()" :style="svgOuterDivObj">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" :style="svgStyleObj" :height="(properties.Height/2 > 60 && properties.Height < 850) ? properties.Height/2 - 45 : properties.Height >= 850 ? 425 : 15" :width="(properties.Width/2 > 60 && properties.Width < 850) ? properties.Width/2 - 45  : properties.Width >= 850 ? 425 : 15"
@@ -143,6 +140,8 @@
         </button>
 
 </div>
+      <pre  :status="this.status" v-if="status" style="position:fixed;z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
+
       </div>
 
     </div>
@@ -405,15 +404,15 @@ export default class FDSpinButton extends Mixins(FdControlVue) {
   status = true
   text (e:MouseEvent) {
     const myRef = this.spinButtonRef
+    var rect = myRef.getBoundingClientRect()
     console.log(this.properties.ControlTipText)
     $(myRef).mousemove(function () {
       $(myRef).mouseover(function (e) {
         $('.tooltiptext')
           .css({
             position: 'absolute',
-            left: e.offsetX - 80,
-            top: e.offsetY - 30,
-            orientation: 'landscape'
+            left: e.clientX - rect.left,
+            top: e.clientY - rect.top
           })
         console.log(e.offsetX)
         console.log(e.offsetY)

@@ -1236,6 +1236,8 @@ export default class FDListBox extends Mixins(FdControlVue) {
   text (e:MouseEvent) {
     this.ab = 1
     const myRef = this.listStyleOuterRef
+    var rect = myRef.getBoundingClientRect()
+
     console.log(this.properties.ControlTipText)
     setTimeout(() => {
       $(myRef).mouseover(function () {

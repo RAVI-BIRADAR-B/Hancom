@@ -1487,8 +1487,8 @@ export default class FDMultiPage extends Mixins(FdContainerVue) {
         $('.tooltiptext')
           .css({
             position: 'absolute',
-            left: e.offsetX,
-            top: e.offsetY - 50
+            left: e.offsetX + 20,
+            top: e.offsetY + 20
           })
         console.log(e.pageX)
         console.log(e.pageY)

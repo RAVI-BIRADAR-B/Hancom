@@ -135,14 +135,14 @@ export default class FDImage extends Mixins(FdControlVue) {
     const myRef1 = this.imageRef1
     console.log(this.properties.ControlTipText)
     debugger
-    $(myRef1).hover(function () {
+    $(myRef1).mouseover(function () {
       $(myRef1).mouseover(function (e) {
         debugger
         $('.tooltiptext')
           .css({
             position: 'absolute',
             left: e.offsetX,
-            top: e.offsetY
+            top: e.offsetY + 20
           })
         console.log(e.pageX)
         console.log(e.pageY)

@@ -1,86 +1,63 @@
-<template style="position:absolute;z-index:6 ">
-<div  class="" style="position:absolute;z-index:7" >
+<template>
   <div
-  class="tooltip"
-  ref="scrollbar"
+  ref="outerRef"
   v-on="eventStoppers()"
-  @click="scrollBarClick,changeStatus()"
+  @click="scrollBarClick, changeStatus()"
   :style="outerScrollBarDivObj"
   @mouseover="updateMouseCursor"
   @keydown.enter="setContentEditable($event, true)"
   @keydown.esc="setContentEditable($event, false)"
   :tabindex="0"
-  @mousedown="controlEditMode"
-  @mouseleave="visibilityHandler()"
+  @mousedown="controlEditMode,text()"
+  class="tooltip"
   @mousemove="text()"
+  @mouseleave="changeStatusAgain()"
   >
-         <pre v-if="this.status && this.properties.ControlTipText && this.firsttwo"  style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
-         <pre v-if="this.status && this.properties.ControlTipText && this.thirdone"   style="position:fixed;z-index:50;" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText"  >{{this.properties.ControlTipText}}</div></pre>
-    <div class="slidecontainer tooltip" :style="cssVars">
+     <pre v-if="this.status && this.properties.ControlTipText"  style="position:fixed; z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
+
+    <div class="slidecontainer" :style="cssVars">
 
       <button :style="scrollBarButtonStyleObj"
-      @mouseover="updateMouseCursor, toptwo()"
+      @mouseover="updateMouseCursor"
       @mousedown="!getDisableValue?properties.Min > properties.Max ? increaseTheValue() : decreaseTheValue():''"
       @mouseup="setIsSpinButtonScrollBarMouseDown"
       @mouseout="setIsSpinButtonScrollBarMouseDown"
-      id="abc"
-      class="tooltip"
-      style="position:relative;z-index:15"
-      @mouseleave="toptwoLeave()"
       >
-
         <FdSvgImage
           key="leftArrow"
           name="left-arrow.svg"
           @hook:mounted="changeForeColor"
-          class="svgLeftRightStyle "
+          class="svgLeftRightStyle"
           :style="svgLeftRightStyleObj"
-
-          style="position:relative;z-index:10"
         />
-
       </button>
-      <div  class="tooltip" style="position:relative;z-index:11" @mouseover="toptwo(), text()" @mouseleave="toptwoLeave()">
-
       <input
         :disabled="getDisableValue"
         type="range"
         :min="properties.Min > properties.Max ? properties.Max : properties.Min"
         :max="properties.Min > properties.Max ? properties.Min : properties.Max"
         :value="properties.Value"
-        class="slider tooltip "
+        class="slider"
         :style="inputStyleObj"
         @input="updateValueProperty"
         orient="vertical"
-        @mouseover="updateMouseCursor,text()"
-        style="posittion:relative;z-index:9"
+        @mouseover="updateMouseCursor"
       />
-
-      </div>
       <button :style="scrollBarButtonStyleObj"
-      @mouseover="updateMouseCursor, controltip(), bottomone(), text()"
+      @mouseover="updateMouseCursor"
       @mousedown="!getDisableValue?properties.Min > properties.Max ? decreaseTheValue() : increaseTheValue():''"
       @mouseup="setIsSpinButtonScrollBarMouseDown"
       @mouseout="setIsSpinButtonScrollBarMouseDown"
-      id="abcd"
-      class="tooltip"
-      style="position:relative;z-index:8"
-      @mouseleave="change(),bottomoneLeave()"
       >
-
         <FdSvgImage
           key="rightArrow"
           name="right-arrow.svg"
           @hook:mounted="changeForeColor"
-          class="svgLeftRightStyle  "
+          class="svgLeftRightStyle"
           :style="svgLeftRightStyleObj"
-          style="position:relative;z-index:14"
         />
-
       </button>
     </div>
-
-</div>
   </div>
 </template>
 
@@ -90,8 +67,6 @@ import FdControlVue from '@/api/abstract/FormDesigner/FdControlVue'
 import FdSvgImage from '@/FormDesigner/components/atoms/FDSVGImage/index.vue'
 import { controlProperties } from '@/FormDesigner/controls-properties'
 import $ from 'jquery'
-import { orientation } from '@/FormDesigner/controls-select-types'
-
 @Component({
   name: 'FDScrollBar',
   components: {
@@ -99,7 +74,7 @@ import { orientation } from '@/FormDesigner/controls-select-types'
   }
 })
 export default class FDScrollBar extends Mixins(FdControlVue) {
-  @Ref('scrollbar') scrollbar: HTMLDivElement;
+  @Ref('outerRef') outerRef: HTMLDivElement;
 
   $el: HTMLDivElement
   isInvert: boolean = false
@@ -147,13 +122,6 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
       '--invertValue': this.isEditMode ? this.isInvert ? '1' : '0' : '0',
       '--thumbHeight': this.thumbHeight,
       '--minHeight': this.minHeight
-    }
-  }
-  get control () {
-    return {
-      transform: (this.properties.Min! > this.properties.Max!) ? this.scrollReAlign() : this.checkOtherOrientations() ? 'rotate(90deg)' : '',
-      transformOrigin: (this.properties.Min! > this.properties.Max!) ? this.checkOtherOrientations() ? '0% 0%' : '' : ''
-
     }
   }
 
@@ -376,104 +344,37 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
       event.stopPropagation()
     }
   }
-  status = true
-  changeStatus () {
-    this.status = false
-  }
-  visibilityHandler () {
-    this.status = true
-  }
-  controltip () {
-    return true
-  }
-  change () {
-    return false
-  }
-  firsttwo = false
-  toptwo () {
-    this.firsttwo = true
-    console.log('hovered on two two')
-  }
-  toptwoLeave () {
-    this.firsttwo = false
-    console.log('leve on top two')
-  }
-  thirdone = false
-  bottomone () {
-    this.thirdone = true
-    console.log('hovered on third one', this.thirdone)
-  }
-  bottomoneLeave () {
-    this.thirdone = false
-    console.log('left third')
-  }
-  text (e:MouseEvent) {
-    var status1 = this.status
-    const myRef = this.scrollbar
-    console.log(this.properties.ControlTipText)
-    var pos:number
-    var final
-    console.log(this.thirdone, 'ysygygdygdygdygdygdyg')
-    if (this.thirdone && this.firsttwo === false) {
-      console.log('in third element')
-      console.log(this.properties.Height! >= this.properties.Width!, ' inner if')
-      if (this.properties.Height! >= this.properties.Width!) {
-        pos = this.properties.Height!
-        $(myRef).mousemove(function () {
-          $(myRef).mouseover(function (e) {
-            $('.tooltiptext')
-              .css({
-                position: 'absolute',
-                left: e.offsetX,
-                top: pos
-                // transform: `rotate(${flag}deg)`
-              })
-            console.log(e.offsetX)
-            console.log('here')
-            console.log(pos + 10)
-          })
-        })
-      } else {
-        pos = this.properties.Width!
-        $(myRef).hover(function () {
-          $(myRef).mouseover(function (e) {
-            console.log('scrollbar is horizontal')
-            $('.tooltiptext')
-              .css({
-                position: 'absolute',
-                left: pos,
-                top: e.offsetY
-                // transform: `rotate(${flag}deg)`
-              })
-            console.log(e.offsetX, e.offsetY)
-          })
-        })
-      }
-    } else {
-      console.log('in outer else')
-      $(myRef).hover(function () {
-        $(myRef).mouseover(function (e) {
-          $('.tooltiptext')
-            .css({
-              position: 'absolute',
-              left: e.offsetX + 20,
-              top: e.offsetY + 10
-            // transform: `rotate(${flag}deg)`
-            })
-          console.log(e.offsetX, e.offsetY)
-        })
-      })
-    }
-  }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
+   text (e:MouseEvent) {
+     const myRef = this.outerRef
+     var rect = myRef.getBoundingClientRect()
+     setTimeout(() => {
+       $(myRef).mousemove(function () {
+         $(myRef).mouseover(function (e) {
+           $('.tooltiptext')
+             .css({
+               position: 'absolute',
+               left: e.clientX - rect.left,
+               top: e.clientY - rect.top
+             })
+           console.log(e.clientY - e.pageY)
+           console.log(`y`)
+           console.log(e.clientX - e.pageX)
+         })
+       })
+     }, 250)
+   }
 }
 </script>
 
 <style scoped>
 .tooltip {
-  display: inline;
-  position: sticky;
-  }
-  .tooltip1 {
   display: inline;
   position: sticky;
   }
@@ -486,22 +387,15 @@ export default class FDScrollBar extends Mixins(FdControlVue) {
   padding:  0;
   background-color: white;
   font-size: 10px;
-  height: 15px;
+  height: 10px;
   padding: 4px;
 color: black;
 width: auto;
-
   /* Position the tooltip */
   }
   .tooltip:hover .tooltiptext {
   visibility: visible;
-  position: static;
-  top:0px;
-  left:0px;
-}
-.tooltip1:hover .tooltiptext {
-  visibility: visible;
-  position: static;
+  position: fixed;
   top:0px;
   left:0px;
 }
@@ -551,6 +445,5 @@ width: auto;
   width: 4px;
   height: 16px;
   margin: auto;
-
 }
 </style>

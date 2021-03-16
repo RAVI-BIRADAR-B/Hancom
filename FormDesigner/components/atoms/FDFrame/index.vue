@@ -38,7 +38,7 @@
       @addControlObj="addContainerControl"
       @mouseover="text()"
       />
-      <pre v-if="this.status && this.properties.ControlTipText"  style="position:fixed; top:clientX,left:clientY" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
+      <pre v-if="this.status && this.properties.ControlTipText"  style="position:fixed; z-index:20" ><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" style="position:sticky;width:auto;left:e.pageX ">{{properties.ControlTipText}}</div></pre>
       </div>
   </div>
   </fieldset>
@@ -340,7 +340,7 @@ export default class FDFrame extends Mixins(FdContainerVue) {
           .css({
             position: 'absolute',
             left: e.offsetX,
-            top: e.offsetY
+            top: e.offsetY + 15
           })
         console.log(e.pageX)
         console.log(e.pageY)

@@ -2,12 +2,13 @@
   <div class="resp-textbox tooltip"
   v-on="eventStoppers()"
   ref="outerRef"
-  @click="textBoxClick"
+  @click="textBoxClick, changeStatus()"
   @mousedown="controlEditMode"
   :tabindex="properties.TabIndex"
   @keydown.enter.self="setContentEditable($event, true)"
   @contextmenu="isEditMode ? openTextContextMenu($event): parentConextMenu($event)"
   @mouseover="text()"
+  @mouseleave="changeStatusAgain()"
   >
 
     <textarea
@@ -44,7 +45,7 @@
       "
       @dragstart="dragBehavior"
     />
-      <pre  v-if="this.ab === 1"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
+      <pre  v-if="this.ab === 1 && this.status && this.properties.ControlTipText"><div id="divContainer"  class="tooltiptext" :input="properties.ControlTipText" >{{properties.ControlTipText}}</div></pre>
 
     <div
       ref="hideSelectionDiv"
@@ -791,6 +792,13 @@ export default class FDTextBox extends Mixins(FdControlVue) {
       }
     })
   }
+   status = true
+   changeStatus () {
+     this.status = false
+   }
+   changeStatusAgain () {
+     this.status = true
+   }
   ab = 0
   text (e:MouseEvent) {
     setTimeout(() => {
